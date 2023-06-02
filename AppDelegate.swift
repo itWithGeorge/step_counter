@@ -34,6 +34,11 @@ import CoreMotion
         result(FlutterError(code: "ALREADY_PENDING", message: "A step count request is already pending", details: nil))
         return
       }
+      
+      guard CMPedometer.authorizationStatus() == .authorized else {
+          result(FlutterError(code: "ERROR", message: "Required to allow access", details: nil))
+          return
+      }
 
       if CMPedometer.isStepCountingAvailable() {
         pedometer.queryPedometerData(from: Date(), to: Date()) { [weak self] (data, error) in
